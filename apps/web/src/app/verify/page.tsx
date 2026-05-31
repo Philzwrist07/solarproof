@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Search, CheckCircle, XCircle, ExternalLink, Shield } from 'lucide-react'
 import { SectionSkeleton } from '@/components/skeleton'
+import { ExportPdfButton } from '@/components/export-pdf-button'
 
 interface ChainOfCustody {
   certificate: {
@@ -148,7 +149,7 @@ export default function VerifyPage() {
           </div>
 
           {/* Certificate */}
-          <Section title="Certificate">
+          <Section title="Certificate" action={<ExportPdfButton certificateId={result.certificate.id} />}>
             <Row label="ID" value={result.certificate.id} mono />
             <Row label="Energy" value={`${result.certificate.kwh} kWh`} />
             <Row
@@ -209,16 +210,19 @@ export default function VerifyPage() {
   )
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, children, action }: { title: string; children: React.ReactNode; action?: React.ReactNode }) {
   return (
     <section aria-labelledby={`section-${title.toLowerCase().replace(/\s+/g, '-')}`}>
       <div className="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
-        <h2
-          id={`section-${title.toLowerCase().replace(/\s+/g, '-')}`}
-          className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400"
-        >
-          {title}
-        </h2>
+        <div className="mb-3 flex items-center justify-between">
+          <h2
+            id={`section-${title.toLowerCase().replace(/\s+/g, '-')}`}
+            className="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400"
+          >
+            {title}
+          </h2>
+          {action}
+        </div>
         <dl className="space-y-2">{children}</dl>
       </div>
     </section>
